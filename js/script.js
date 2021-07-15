@@ -70,15 +70,16 @@ function listRecipes() {
 
 function searchByName() {
   let search = window.location.search.slice(1).split("=");
-  search = search[1];
-  fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=" + search)
-    .then(response => response.json())
-    .then((data) => {
-      if (data.meals === null) {
-        document.getElementById("recipes-list").innerHTML = "No results found";
-      } else {
-        data.meals.forEach((meal) => {
-          document.getElementById("recipes-list").innerHTML += `
+  if (search[0] == "search") {
+    search = search[1];
+    fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=" + search)
+      .then(response => response.json())
+      .then((data) => {
+        if (data.meals === null) {
+          document.getElementById("recipes-list").innerHTML = "No results found";
+        } else {
+          data.meals.forEach((meal) => {
+            document.getElementById("recipes-list").innerHTML += `
             <div class="col recipe-box">
               <div class="card" style="width: 10rem;" data-bs-toggle="modal" data-bs-target="#modal-${meal.idMeal}">
               <img src="${meal.strMealThumb}" class="card-img-top" alt="${meal.strMeal} image">
@@ -135,9 +136,13 @@ function searchByName() {
               </div>
             </div>
           `
-        })
-      }
-    })
+          })
+        }
+      })
+  } else {
+    window.location.href = "./";
+  }
+
 }
 
 function verify() {
